@@ -5,11 +5,77 @@ on:
       app-path:
         required: true
         type: string
+      app-name:
+        required: true
+        type: string
       stage:
         required: true
         type: string
 
 jobs:
+  versioning:
+    runs-on: ubuntu-20.04
+    if: github.ref == 'refs/heads/master'
+    defaults:
+      run:
+        working-directory: ${{ inputs.app-path }}
+
+    steps:
+      - name: Check out the codes
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install semver
+        run: |
+          npm install --global semver
+
+      - name: Get application name
+        id: get-application-name
+        run: |
+          APP_NAME=$(awk -F'[ ="]+' '$1 == "name" { print $2 }' pyproject.toml | head -1)
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Get the current version
+        id: get-current-version
+        run: |
+          CURRENT_VERSION=$(git tag | grep ${{ steps.get-application-name.outputs.APP_NAME }}  | sort -Vr | head -1 | cut -d "/" -f 2)
+          if [ -z ${CURRENT_VERSION} ]; then
+            CURRENT_VERSION="1.0.0"
+          fi
+          echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Get the bumped version
+        id: get-bumped-version
+        env:
+          CURRENT_VERSION: ${{ steps.get-current-version.outputs.CURRENT_VERSION }}
+        run: |
+          BUMPED_VERSION=$(semver --increment minor ${CURRENT_VERSION})
+          echo "BUMPED_VERSION=${BUMPED_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Update the version related files
+        env:
+          CURRENT_VERSION: ${{ steps.get-current-version.outputs.CURRENT_VERSION }}
+          BUMPED_VERSION: ${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
+        run: |
+          echo "${BUMPED_VERSION}" > ./.release/version
+          if [[ "${GITHUB_REF##*/}" == "main" ]] ; then
+            sed -i "s/version = \"${CURRENT_VERSION}\"/version = \"${BUMPED_VERSION}\"/" pyproject.toml
+            echo "application production release version update"
+          fi
+
+      - name: Commit, Tag and Push
+        uses: EndBug/add-and-commit@v7
+        with:
+          message: Bump the version from ${{ steps.get-current-version.outputs.CURRENT_VERSION}} to ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}} by ${{ github.event.inputs.level }}
+          add: '["./.release/version", "pyproject.toml"]'
+          pathspec_error_handling: exitImmediately
+          tag: ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}}
+          push: true
+
   deploy:
     runs-on: ubuntu-20.04
     defaults:
@@ -63,10 +129,12 @@ jobs:
       - name: Install python packages
         run: |
           poetry install --no-root
-      - name: Check basic lint
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Lint
         run: |
-          poetry run black --check --fast .
+          poetry run black --check --fast --preview .
           poetry run flake8 --config=setup.cfg .
+          poetry run isort --check-only .
       - name: Check if requirements.txt is updated
         run: |
           poetry export --format requirements.txt --without-hashes | cut -f 1 -d ';' > requirements_from_poetry.txt
@@ -91,3 +159,4 @@ jobs:
 #          STAGE: ${{ steps.set-lambda-config.outputs.STAGE }}
 #        run: |
 #          ./deploy.sh ${STAGE}
+
