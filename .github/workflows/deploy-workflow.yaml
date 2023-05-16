@@ -52,6 +52,14 @@ jobs:
         with:
           version: 1.4.2
           installer-parallel: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
+      - name: Cache poetry virtualenv
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: ~/.virtualenvs
+          key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('poetry.lock') }}
       - name: Install python packages
         run: |
           poetry install --no-root
