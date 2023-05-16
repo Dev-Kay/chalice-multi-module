@@ -152,6 +152,7 @@ jobs:
       - name: Deploy lambda
         run: |
           ls -altr
+          ls -altr ../
           source .venv/bin/activate
           chalice local --stage "${{ inputs.stage }}" --port=8000
           curl http://localhost:8000
