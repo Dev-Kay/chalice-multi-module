@@ -76,6 +76,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-20.04
+    needs: [versioning]
     defaults:
       run:
         working-directory: ${{ inputs.app-path }}
