@@ -1,11 +1,11 @@
 from chalice import Chalice
 
-app = Chalice(app_name='testB')
+app = Chalice(app_name='test-a')
 
 
 @app.route('/')
 def index():
-    return {'hello': 'testB'}
+    return {'hello': 'test-a'}
 
 
 # The view function above will return {"hello": "world"}
