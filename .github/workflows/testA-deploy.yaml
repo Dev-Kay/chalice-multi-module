@@ -6,9 +6,7 @@ on:
 
 jobs:
   deploy:
-    uses: ./.github/workflows/deploy-workflow.yaml
+    uses: ./.github/deploy-workflow.yaml
     with:
       app-name: ./testA
       stage: staging
-      branch: proposed-release
-

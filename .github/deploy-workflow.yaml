@@ -8,9 +8,6 @@ on:
       stage:
         required: true
         type: string
-      branch:
-        required: true
-        type: string
 
 jobs:
   deploy:
