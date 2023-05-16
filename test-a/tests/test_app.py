@@ -1,6 +1,6 @@
-import app
-
 from chalice.test import Client
+
+import app
 
 
 def test_index_route():

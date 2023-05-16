@@ -73,7 +73,7 @@ jobs:
           message: Bump the version from ${{ steps.get-current-version.outputs.CURRENT_VERSION}} to ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}}
           add: '["${{ inputs.app-path }}/.release/version", "${{ inputs.app-path }}/pyproject.toml"]'
           pathspec_error_handling: exitImmediately
-          tag: ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}}
+          tag: "${{ steps.get-application-name.outputs.APP_NAME }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION}}"
           push: true
 
   deploy:
