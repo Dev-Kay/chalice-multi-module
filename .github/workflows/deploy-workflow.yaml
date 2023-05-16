@@ -60,7 +60,7 @@ jobs:
           BUMPED_VERSION: ${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
         run: |
           echo "${BUMPED_VERSION}" > ./.release/version
-          if [[ "${GITHUB_REF##*/}" == "main" ]] ; then
+          if [[ "${GITHUB_REF##*/}" == "master" ]] ; then
             sed -i "s/version = \"${CURRENT_VERSION}\"/version = \"${BUMPED_VERSION}\"/" pyproject.toml
             echo "application production release version update"
           fi
@@ -68,7 +68,7 @@ jobs:
       - name: Commit, Tag and Push
         uses: EndBug/add-and-commit@v7
         with:
-          message: Bump the version from ${{ steps.get-current-version.outputs.CURRENT_VERSION}} to ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}} by ${{ github.event.inputs.level }}
+          message: Bump the version from ${{ steps.get-current-version.outputs.CURRENT_VERSION}} to ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}}
           add: '["${{ inputs.app-path }}/.release/version", "${{ inputs.app-path }}/pyproject.toml"]'
           pathspec_error_handling: exitImmediately
           tag: ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}}
@@ -118,12 +118,12 @@ jobs:
           version: 1.4.2
           installer-parallel: true
           virtualenvs-in-project: false
-          virtualenvs-path: ~/.virtualenvs
+          virtualenvs-path: ~/.venv
       - name: Cache poetry virtualenv
         uses: actions/cache@v1
         id: cache
         with:
-          path: ~/.virtualenvs
+          path: ~/.venv
           key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles(inputs.app-path) }}
       - name: Install python packages
         run: |
