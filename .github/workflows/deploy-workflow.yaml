@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "${BUMPED_VERSION}" > ./.release/version
           if [[ "${GITHUB_REF##*/}" == "master" ]] ; then
-            sed -i "s/version = \"${CURRENT_VERSION}\"/version = \"${BUMPED_VERSION}\"/" ${{ inputs.app-path }}/pyproject.toml
+            sed -i "s/version = \"${CURRENT_VERSION}\"/version = \"${BUMPED_VERSION}\"/" pyproject.toml
             echo "application production release version update"
           fi
 
