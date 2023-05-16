@@ -152,6 +152,7 @@ jobs:
       - name: Deploy lambda
         run: |
           poetry run chalice local --stage "${{ inputs.stage }}" --port=8000 & 
+          sleep 10
           curl http://localhost:8000
 #
 #      - name: Install Poetry
