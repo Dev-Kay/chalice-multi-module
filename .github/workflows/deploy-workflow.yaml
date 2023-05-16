@@ -78,7 +78,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-20.04
-    needs: [versioning]
+#    needs: [versioning]
     defaults:
       run:
         working-directory: ${{ inputs.app-path }}
@@ -114,23 +114,30 @@ jobs:
         id: full-python-version
         run: |
           python -c "import sys; print('::set-output name=version::' + '-'.join(map(str, sys.version_info)))"
-      - name: Install poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.4.2
-          installer-parallel: true
-          virtualenvs-in-project: false
-          virtualenvs-path: ~/.venv
-      - name: Cache poetry virtualenv
-        uses: actions/cache@v1
-        id: cache
-        with:
-          path: ~/.venv
-          key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles(inputs.app-path) }}
-      - name: Install python packages
+#      - name: Install poetry
+#        uses: snok/install-poetry@v1
+#        with:
+#          version: 1.4.2
+#          installer-parallel: true
+#          virtualenvs-in-project: false
+#          virtualenvs-path: ~/.venv
+#      - name: Cache poetry virtualenv
+#        uses: actions/cache@v1
+#        id: cache
+#        with:
+#          path: ~/.venv
+#          key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles(inputs.app-path) }}
+#      - name: Install python packages
+#        run: |
+#          poetry install --no-root
+#        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Install Poetry
         run: |
-          poetry install --no-root
-        if: steps.cache.outputs.cache-hit != 'true'
+          curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
+      - uses: actions/setup-python@v4
+        with:
+          cache: 'poetry'
+      - run: poetry install
       - name: Lint
         run: |
           poetry run black --check --fast --preview .
