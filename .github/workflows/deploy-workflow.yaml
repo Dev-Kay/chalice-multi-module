@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "${BUMPED_VERSION}" > ./.release/version
           if [[ "${GITHUB_REF##*/}" == "master" ]] ; then
-            sed -i "s/version = \"${CURRENT_VERSION}\"/version = \"${BUMPED_VERSION}\"/" pyproject.toml
+            sed -i "s/version = \"${CURRENT_VERSION}\"/version = \"${BUMPED_VERSION}\"/" ${{ inputs.app-path }}/pyproject.toml
             echo "application production release version update"
           fi
 
@@ -144,6 +144,7 @@ jobs:
         run: poetry run pytest
       - name: Deploy lambda
         run: |
+          source .venv/bin/activate
           chalice local --stage "${{ inputs.stage }}" --port=8000
           curl http://localhost:8000
 #
