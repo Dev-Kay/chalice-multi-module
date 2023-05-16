@@ -69,7 +69,7 @@ jobs:
         uses: EndBug/add-and-commit@v7
         with:
           message: Bump the version from ${{ steps.get-current-version.outputs.CURRENT_VERSION}} to ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}} by ${{ github.event.inputs.level }}
-          add: '["./.release/version", "pyproject.toml"]'
+          add: '["./${{ inputs.app-path }}/.release/version", "./${{ inputs.app-path }}/pyproject.toml"]'
           pathspec_error_handling: exitImmediately
           tag: ${{ steps.get-bumped-version.outputs.BUMPED_VERSION}}
           push: true
