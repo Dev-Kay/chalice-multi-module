@@ -151,7 +151,7 @@ jobs:
         run: poetry run pytest
       - name: Deploy lambda
         run: |
-          chalice local --stage "${{ inputs.stage }}" --port=8000
+          poetry run chalice local --stage "${{ inputs.stage }}" --port=8000
           curl http://localhost:8000
 #
 #      - name: Install Poetry
