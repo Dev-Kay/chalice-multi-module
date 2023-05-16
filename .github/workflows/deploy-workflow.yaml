@@ -59,7 +59,7 @@ jobs:
         id: cache
         with:
           path: ~/.virtualenvs
-          key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('poetry.lock') }}
+          key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles("${{ inputs.app-path }}/poetry.lock") }}
       - name: Install python packages
         run: |
           poetry install --no-root
