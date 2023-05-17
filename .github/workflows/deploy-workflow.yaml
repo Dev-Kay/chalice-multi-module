@@ -153,7 +153,9 @@ jobs:
         run: |
           poetry run chalice local --stage "${{ inputs.stage }}" --port=8000 & 
           sleep 10
-          curl http://localhost:8000
+          result="$(curl http://localhost:8000)" 
+          sleep 5
+          echo ${result}
 #
 #      - name: Install Poetry
 #        run: |
