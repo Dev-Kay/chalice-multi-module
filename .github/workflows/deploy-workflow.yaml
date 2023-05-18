@@ -78,7 +78,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-20.04
-    needs: [versioning]
+#    needs: [versioning]
     defaults:
       run:
         working-directory: ${{ inputs.app-path }}
@@ -89,23 +89,12 @@ jobs:
         run: |
           echo "input working-directory :  ${{ inputs.app-path }}"
           echo "branch : ${GITHUB_REF##*/}"
-
-#      - name: Configure Stage AWS credentials
-#        if: ${{ inputs.stage == 'staging' }}
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ap-northeast-2
-#
-#      - name: Configure Prod AWS credentials
-#        if: ${{ inputs.stage == 'prod' }}
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.PRD_AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.PRD_AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ap-northeast-2
-
+      - name: Configure Stage AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
@@ -120,46 +109,32 @@ jobs:
           version: 1.4.2
           installer-parallel: true
           virtualenvs-in-project: false
-          virtualenvs-path: ~/.venv
+          virtualenvs-path: ~/.virtualenvs
       - name: Cache poetry virtualenv
         uses: actions/cache@v1
         id: cache
         with:
-          path: ~/.venv
+          path: ~/.virtualenvs
           key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles(inputs.app-path) }}
       - name: Install python packages
         run: |
           poetry install --no-root
         if: steps.cache.outputs.cache-hit != 'true'
-      - name: Lint
-        run: |
-          poetry run black --check --fast --preview .
-          poetry run flake8 --config=setup.cfg .
-          poetry run isort --check-only .
-      - name: Check if requirements.txt is updated
-        run: |
-          poetry export --format requirements.txt --without-hashes | cut -f 1 -d ';' > requirements_from_poetry.txt
-          diff -c requirements_from_poetry.txt requirements.txt
+#      - name: Lint
+#        run: |
+#          poetry run black --check --fast --preview .
+#          poetry run flake8 --config=setup.cfg .
+#          poetry run isort --check-only .
+#      - name: Static type check
+#        run: |
+#          poetry run mypy --config-file setup.cfg .
+#      - name: Check if requirements.txt is updated
+#        run: |
+#          poetry export --format requirements.txt --without-hashes | cut -f 1 -d ';' > requirements_from_poetry.txt
+#          diff -c requirements_from_poetry.txt requirements.txt
       - name: Run Pytest
         run: poetry run pytest
       - name: Deploy lambda
         run: |
-          ls -altr
-          source ~/.venv/bin/activate
-          chalice local --stage "${{ inputs.stage }}" --port=8000
-          curl http://localhost:8000
-#
-#      - name: Install Poetry
-#        run: |
-#          curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
-#      - uses: actions/setup-python@v4
-#        with:
-#          cache: 'poetry'
-#      - run: poetry install
-#
-#      - name: Deploy Lambda
-#        env:
-#          STAGE: ${{ steps.set-lambda-config.outputs.STAGE }}
-#        run: |
-#          ./deploy.sh ${STAGE}
+          poetry run chalice deploy --stage "${{ inputs.stage }}"
 

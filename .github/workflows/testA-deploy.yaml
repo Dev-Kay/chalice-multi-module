@@ -7,7 +7,12 @@ on:
 
 jobs:
   deploy:
+    permissions:
+      id-token: write # need this for OIDC
+      contents: read
     uses: ./.github/workflows/deploy-workflow.yaml
     with:
       app-path: ./test-a
       stage: staging
+    secrets: inherit
+
