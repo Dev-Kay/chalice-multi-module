@@ -40,7 +40,7 @@ jobs:
         id: get-current-version
         run: |
           result="$(git tag)" 
-          result1="$(git ls-remote --tags --refs --exit-code --sort=-v:refname | grep -oE 'refs/tags/(.+)$' | sed 's/refs\/tags\///')
+          result1="$(git ls-remote --tags --refs --exit-code --sort=-v:refname | grep -oE 'refs/tags/(.+)$' | sed 's/refs\/tags\///')"
           sleep 5
           echo "tags :: ${result}"
           echo "tags :: ${result1}"
