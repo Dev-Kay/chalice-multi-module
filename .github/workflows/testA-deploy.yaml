@@ -12,5 +12,7 @@ jobs:
     with:
       app-path: ./test-a
       stage: staging
-    secrets: inherit
+    secrets:
+      aws-secret-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
 
