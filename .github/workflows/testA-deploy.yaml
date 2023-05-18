@@ -12,6 +12,7 @@ jobs:
     with:
       app-path: ./test-a
   deploy:
+    needs: release
     uses: ./.github/workflows/deployment.yaml
     with:
       app-path: ./test-a
