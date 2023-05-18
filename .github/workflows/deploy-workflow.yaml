@@ -141,5 +141,5 @@ jobs:
           result="$(curl http://localhost:8000)" 
           sleep 5
           echo ${result}
-          poetry chalice deploy --stage "${{ inputs.stage }}"
+          poetry run chalice deploy --stage "${{ inputs.stage }}"
 
