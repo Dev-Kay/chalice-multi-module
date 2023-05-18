@@ -72,6 +72,7 @@ jobs:
         env:
           BUMPED_VERSION: ${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
           APP_NAME: ${{ steps.get-application-name.outputs.APP_NAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${APP_NAME}/${BUMPED_VERSION}
           release_name: ${APP_NAME}/${BUMPED_VERSION}
