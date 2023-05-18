@@ -45,10 +45,6 @@ jobs:
         run: |
           CURRENT_VERSION=$(git tag | grep ${{ steps.get-application-name.outputs.APP_NAME }}  | sort -Vr | head -1 | cut -d "/" -f 2)
           echo "CURRENT_VERSION :: ${CURRENT_VERSION}"
-          if [ -z ${CURRENT_VERSION} ]; then
-            CURRENT_VERSION="1.0.0"
-          fi
-          echo "CURRENT_VERSION2222 :: ${CURRENT_VERSION}"
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Get the bumped version
