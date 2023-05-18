@@ -123,26 +123,26 @@ jobs:
         run: |
           poetry run chalice deploy --stage "${{ inputs.stage }}"
 
-#  release:
-#    runs-on: ubuntu-20.04
-#    if: github.ref == 'refs/heads/master'
-#    needs: [versioning]
-#    steps:
-#      - name: Check out the codes
-#        uses: actions/checkout@v3
-#      - name: Commit, Tag and Push
-#        uses: EndBug/add-and-commit@v7
-#        with:
-#          message: GithubAction versioning
-#          add: '["${{ inputs.app-path }}/.release/version", "${{ inputs.app-path }}/pyproject.toml"]'
-#          pathspec_error_handling: exitImmediately
-#          push: true
-#      - name: Create Git Release And Tag
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ needs.versioning.outputs.APP_NAME }}/${{ needs.versioning.outputs.BUMPED_VERSION}}
-#          release_name: ${{ needs.versioning.outputs.APP_NAME }}/${{ needs.versioning.outputs.BUMPED_VERSION}}
-#          body_path: ${{ inputs.app-path }}/.release/note.md
-#        id: git_release
+  release:
+    runs-on: ubuntu-20.04
+    if: github.ref == 'refs/heads/master'
+    needs: [versioning]
+    steps:
+      - name: Check out the codes
+        uses: actions/checkout@v3
+      - name: Commit, Tag and Push
+        uses: EndBug/add-and-commit@v7
+        with:
+          message: GithubAction versioning
+          add: '["${{ inputs.app-path }}/.release/version", "${{ inputs.app-path }}/pyproject.toml"]'
+          pathspec_error_handling: exitImmediately
+          push: true
+      - name: Create Git Release And Tag
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.versioning.outputs.APP_NAME }}/${{ needs.versioning.outputs.BUMPED_VERSION}}
+          release_name: ${{ needs.versioning.outputs.APP_NAME }}/${{ needs.versioning.outputs.BUMPED_VERSION}}
+          body_path: ${{ inputs.app-path }}/.release/note.md
+        id: git_release
