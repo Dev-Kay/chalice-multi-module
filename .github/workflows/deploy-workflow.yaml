@@ -43,6 +43,7 @@ jobs:
       - name: Get the current version
         id: get-current-version
         run: |
+          git tag
           CURRENT_VERSION=$(git tag | grep ${{ steps.get-application-name.outputs.APP_NAME }}  | sort -Vr | head -1 | cut -d "/" -f 2)
           echo "CURRENT_VERSION :: ${CURRENT_VERSION}"
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
