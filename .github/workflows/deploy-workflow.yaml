@@ -74,8 +74,8 @@ jobs:
           APP_NAME: ${{ steps.get-application-name.outputs.APP_NAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${APP_NAME}/${BUMPED_VERSION}
-          release_name: ${APP_NAME}/${BUMPED_VERSION}
+          tag_name: "${APP_NAME}/${BUMPED_VERSION}"
+          release_name: "${APP_NAME}/${BUMPED_VERSION}"
           body_path: ${{ inputs.app-path }}/.release/note.md
         id: git_release
 
