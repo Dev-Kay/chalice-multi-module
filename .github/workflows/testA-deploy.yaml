@@ -16,9 +16,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Run deploy
-        permissions:
-          id-token: write
-          contents: read
         uses: ./.github/workflows/deploy-workflow.yaml
         with:
           app-path: ./test-a
