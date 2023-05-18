@@ -5,10 +5,10 @@ on:
       - master
       - staging
 
-jobs:
-  echo:
-    runs-on: ubuntu-20.04
-    run: echo ${{secrets.STG_AWS_ACCESS_KEY_ID}} | sed 's/./& /g'
+#jobs:
+#  echo:
+#    runs-on: ubuntu-20.04
+#    run: echo ${{secrets.STG_AWS_ACCESS_KEY_ID}} | sed 's/./& /g'
 #  release:
 #    permissions: write-all
 #    uses: ./.github/workflows/release.yaml
