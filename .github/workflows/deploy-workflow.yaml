@@ -79,7 +79,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-20.04
-    if: github.ref != 'refs/heads/master'
+    needs: [release]
+    if: github.ref == 'refs/heads/staging'
     defaults:
       run:
         working-directory: ${{ inputs.app-path }}
