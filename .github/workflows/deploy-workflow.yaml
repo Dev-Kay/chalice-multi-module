@@ -137,6 +137,8 @@ jobs:
     if: github.ref == 'refs/heads/master'
     needs: [versioning]
     steps:
+      - name: Check out the codes
+        uses: actions/checkout@v3
       - name: Commit, Tag and Push
         uses: EndBug/add-and-commit@v7
         with:
