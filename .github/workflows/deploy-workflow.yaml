@@ -23,26 +23,19 @@ jobs:
     steps:
       - name: Check out the codes
         uses: actions/checkout@v3
-
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-
       - name: Install semver
         run: |
           npm install --global semver
-
       - name: Get application name
         id: get-application-name
         run: |
           APP_NAME=$(awk -F'[ ="]+' '$1 == "name" { print $2 }' pyproject.toml | head -1)
           echo "APP_NAME :: ${APP_NAME}"
           echo "APP_NAME=${APP_NAME}" >> $GITHUB_OUTPUT
-
-      - name: Get git tag
-        id: tags
-        uses: dawidd6/action-get-tag@v1
       - name: Get the current version
         id: get-current-version
         run: |
@@ -54,7 +47,6 @@ jobs:
           CURRENT_VERSION=$(git tag | grep ${{ steps.get-application-name.outputs.APP_NAME }}  | sort -Vr | head -1 | cut -d "/" -f 2)
           echo "CURRENT_VERSION :: ${CURRENT_VERSION}"
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
-
       - name: Get the bumped version
         id: get-bumped-version
         env:
