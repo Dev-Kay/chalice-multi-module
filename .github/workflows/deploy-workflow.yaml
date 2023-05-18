@@ -39,12 +39,7 @@ jobs:
       - name: Get the current version
         id: get-current-version
         run: |
-          result="$(git tag)" 
-          result1="$(git ls-remote --tags --refs --exit-code --sort=-v:refname | grep -oE 'refs/tags/(.+)$' | sed 's/refs\/tags\///')"
-          sleep 5
-          echo "tags :: ${result}"
-          echo "tags :: ${result1}"
-          CURRENT_VERSION=$(git tag | grep ${{ steps.get-application-name.outputs.APP_NAME }}  | sort -Vr | head -1 | cut -d "/" -f 2)
+          CURRENT_VERSION="$(git ls-remote --tags --refs --exit-code --sort=-v:refname | grep -oE 'refs/tags/test-a/(.+)$' | sed 's/refs\/tags\/test-a\///' | head -1)"
           echo "CURRENT_VERSION :: ${CURRENT_VERSION}"
           echo "CURRENT_VERSION=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
       - name: Get the bumped version
