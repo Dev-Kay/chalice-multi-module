@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     permissions:
-      id-token: write # need this for OIDC
+      id-token: write-all
       contents: read
     uses: ./.github/workflows/deploy-workflow.yaml
     with:
