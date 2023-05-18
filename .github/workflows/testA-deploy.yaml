@@ -7,17 +7,12 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Configure Stage AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-      - name: Run deploy
-        uses: ./.github/workflows/deploy-workflow.yaml
-        with:
-          app-path: ./test-a
-          stage: staging
+    permissions:
+      id-token: write # need this for OIDC
+      contents: read
+    uses: ./.github/workflows/deploy-workflow.yaml
+    with:
+      app-path: ./test-a
+      stage: staging
+    secrets: inherit
 
