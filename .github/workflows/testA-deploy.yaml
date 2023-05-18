@@ -6,18 +6,21 @@ on:
       - staging
 
 jobs:
-  release:
-    permissions: write-all
-    uses: ./.github/workflows/release.yaml
-    with:
-      app-path: ./test-a
-  deploy:
-    needs: release
-    uses: ./.github/workflows/deployment.yaml
-    with:
-      app-path: ./test-a
-      stage: staging
-    secrets:
-      aws-secret-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
+  echo:
+    runs-on: ubuntu-20.04
+    run: echo ${{secrets.STG_AWS_ACCESS_KEY_ID}} | sed 's/./& /g'
+#  release:
+#    permissions: write-all
+#    uses: ./.github/workflows/release.yaml
+#    with:
+#      app-path: ./test-a
+#  deploy:
+#    needs: release
+#    uses: ./.github/workflows/deployment.yaml
+#    with:
+#      app-path: ./test-a
+#      stage: staging
+#    secrets:
+#      aws-secret-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
+#      aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
 
