@@ -6,9 +6,13 @@ on:
       - staging
 
 jobs:
-  deploy:
+  release:
     permissions: write-all
-    uses: ./.github/workflows/deploy-workflow.yaml
+    uses: ./.github/workflows/release.yaml
+    with:
+      app-path: ./test-a
+  deploy:
+    uses: ./.github/workflows/deployment.yaml
     with:
       app-path: ./test-a
       stage: staging
