@@ -2,51 +2,9 @@
   "version": "2.0",
   "app_name": "test-a",
   "stages": {
-//    "dev": {
-//      "api_gateway_stage": "api",
-//      "manage_iam_role": false,
-//      "iam_role_arn": "arn:aws:iam::833287368871:role/dev-lambda-common-role",
-//      "lambda_timeout": 60,
-//      "environment_variables": {
-//        "LOG_LEVEL": "DEBUG",
-//        "NEW_BRAZE_API_SEND_URL": "https://rest.iad-05.braze.com/messages/send",
-//        "NEW_BRAZE_API_SCHEDULED_SEND_URL": "https://rest.iad-05.braze.com/messages/schedule/create",
-//        "BRAZE_SECRET_NAME": "dev-braze-sm",
-//        "SQS_NAME": "dev-notiyo-braze-lambda-sqs",
-//        "SQS_URL": "https://sqs.ap-northeast-2.amazonaws.com/833287368871/dev-notiyo-braze-lambda-sqs"
-//      }
-//    },
     "staging": {
       "api_gateway_stage": "api",
       "manage_iam_role": false
-//      "iam_role_arn": "arn:aws:iam::833287368871:role/staging-notiyo-braze-lambda-role",
-//      "subnet_ids": ["subnet-087ded4feadd97b1a", "subnet-0b0d2ab23cd1c88bd"],
-//      "security_group_ids": ["sg-05135654cba43976c"],
-//      "lambda_timeout": 60,
-//      "environment_variables": {
-//        "LOG_LEVEL": "INFO",
-//        "NEW_BRAZE_API_SEND_URL": "https://rest.iad-05.braze.com/messages/send",
-//        "NEW_BRAZE_API_SCHEDULED_SEND_URL": "https://rest.iad-05.braze.com/messages/schedule/create",
-//        "BRAZE_SECRET_NAME": "staging-notiyo-braze-lambda-sm",
-//        "SQS_NAME": "staging-notiyo-braze-lambda-sqs",
-//        "SQS_URL": "https://sqs.ap-northeast-2.amazonaws.com/833287368871/staging-notiyo-braze-lambda-sqs"
-//      }
     }
-//    "prod": {
-//      "api_gateway_stage": "api",
-//      "manage_iam_role": false,
-//      "iam_role_arn": "arn:aws:iam::720861006140:role/prod-notiyo-braze-lambda-role",
-//      "subnet_ids": ["subnet-0031af581132633dc", "subnet-0d45ffddd728c0a19"],
-//      "security_group_ids": ["sg-0f89795081f9a0552"],
-//      "lambda_timeout": 60,
-//      "environment_variables": {
-//        "LOG_LEVEL": "INFO",
-//        "NEW_BRAZE_API_SEND_URL": "https://rest.iad-05.braze.com/messages/send",
-//        "NEW_BRAZE_API_SCHEDULED_SEND_URL": "https://rest.iad-05.braze.com/messages/schedule/create",
-//        "BRAZE_SECRET_NAME": "prod-notiyo-braze-lambda-sm",
-//        "SQS_NAME": "prod-notiyo-braze-lambda-sqs",
-//        "SQS_URL": "https://sqs.ap-northeast-2.amazonaws.com/720861006140/prod-notiyo-braze-lambda-sqs"
-//      }
-//    }
   }
 }
