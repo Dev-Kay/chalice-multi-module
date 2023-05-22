@@ -39,6 +39,7 @@ jobs:
         run: |
           echo "working-directory :  ${{ env.APP_PATH }}"
           echo "branch : ${GITHUB_REF##*/}"
+          cat pyproject.toml
 #       - name: Configure AWS credentials
 #         uses: aws-actions/configure-aws-credentials@v1
 #         with:
