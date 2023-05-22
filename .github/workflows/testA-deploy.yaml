@@ -12,6 +12,8 @@ jobs:
   approve:
     runs-on: ubuntu-20.04
     environment: Prod
+    steps:
+      - run: echo "Approve Check"
   release:
     needs: approve
     permissions: write-all
