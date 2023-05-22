@@ -9,14 +9,15 @@ jobs:
 #  echo:
 #    runs-on: ubuntu-20.04
 #    run: echo ${{secrets.STG_AWS_ACCESS_KEY_ID}} | sed 's/./& /g'
-  release:
+  approve:
     runs-on: ubuntu-20.04
     environment: Prod
+  release:
+    needs: approve
     permissions: write-all
-    steps:
-      - uses: ./.github/workflows/release.yaml
-        with:
-          app-path: ./test-a
+    uses: ./.github/workflows/release.yaml
+    with:
+      app-path: ./test-a
 #  deploy:
 #    needs: release
 #    uses: ./.github/workflows/deployment.yaml
