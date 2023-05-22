@@ -12,7 +12,7 @@ jobs:
   release:
     runs-on: ubuntu-20.04
     environment: Prod
-    step:
+    steps:
       - permissions: write-all
         uses: ./.github/workflows/release.yaml
         with:
