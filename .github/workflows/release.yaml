@@ -2,16 +2,19 @@ name: Default release workflow
 on:
   workflow_call:
     inputs:
-      app-path:
+      app-name:
         required: true
         type: string
 
+env:
+  APP_PATH: ./${{ inputs.app-name }}
+  
 jobs:
   release:
     runs-on: ubuntu-20.04
     defaults:
       run:
-        working-directory: ${{ inputs.app-path }}
+        working-directory: ${{ env.APP_PATH }}
     steps:
       - name: Check out the codes
         uses: actions/checkout@v3
@@ -22,16 +25,10 @@ jobs:
       - name: Install semver
         run: |
           npm install --global semver
-      - name: Get application name
-        id: get-application-name
-        run: |
-          APP_NAME=$(awk -F'[ ="]+' '$1 == "name" { print $2 }' pyproject.toml | head -1)
-          echo "APP_NAME :: ${APP_NAME}"
-          echo "APP_NAME=${APP_NAME}" >> $GITHUB_OUTPUT
       - name: Get the current version
         id: get-current-version
         env:
-          APP_NAME: ${{ steps.get-application-name.outputs.APP_NAME }}
+          APP_NAME: ${{ inputs.app-name }}
         run: |
           CURRENT_VERSION=$(git ls-remote --tags --refs --exit-code --sort=-v:refname \
               | grep -oE "refs/tags/${APP_NAME}/(.+)$" \
@@ -60,15 +57,16 @@ jobs:
         uses: EndBug/add-and-commit@v7
         with:
           message: GithubAction versioning
-          add: '["${{ inputs.app-path }}/.release/version", "${{ inputs.app-path }}/pyproject.toml"]'
+          add: '["${{ env.APP_PATH }}/.release/version", "${{ env.APP_PATH }}/pyproject.toml"]'
           pathspec_error_handling: exitImmediately
           push: true
       - name: Create Git Release And Tag
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_NAME: ${{ inputs.app-name }}
         with:
-          tag_name: ${{ steps.get-application-name.outputs.APP_NAME }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
-          release_name: ${{ steps.get-application-name.outputs.APP_NAME }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
-          body_path: ${{ inputs.app-path }}/.release/note.md
+          tag_name: ${{ APP_NAME }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
+          release_name: ${{ APP_NAME }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
+          body_path: ${{ env.APP_PATH }}/.release/note.md
         id: git_release
