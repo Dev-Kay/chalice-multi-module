@@ -64,9 +64,8 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APP_NAME: ${{ inputs.app-name }}
         with:
-          tag_name: ${{ APP_NAME }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
-          release_name: ${{ APP_NAME }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
+          tag_name: ${{ inputs.app-name }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
+          release_name: ${{ inputs.app-name }}/${{ steps.get-bumped-version.outputs.BUMPED_VERSION }}
           body_path: ${{ env.APP_PATH }}/.release/note.md
         id: git_release
