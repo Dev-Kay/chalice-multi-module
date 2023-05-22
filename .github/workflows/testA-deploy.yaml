@@ -19,12 +19,12 @@ jobs:
 #     permissions: write-all
 #     uses: ./.github/workflows/release.yaml
 #     with:
-#       app-path: ./test-a
+#       app-name: test-a
   deploy:
 #     needs: release
     uses: ./.github/workflows/deployment.yaml
     with:
-      app-name: ./test-a
+      app-name: test-a
       stage: staging
     secrets:
       aws-secret-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
