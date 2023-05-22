@@ -26,7 +26,7 @@ jobs:
     with:
       app-name: test-a
       stage: staging
-      tag: 1.3.0
+      tag: 1.3.1
     secrets:
       aws-secret-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
