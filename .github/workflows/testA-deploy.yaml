@@ -14,19 +14,18 @@ jobs:
     environment: Prod
     steps:
       - run: echo "Approve Check"
-  release:
-    needs: approve
-    permissions: write-all
-    uses: ./.github/workflows/release.yaml
-    with:
-      app-name: test-a
+#   release:
+#     needs: approve
+#     permissions: write-all
+#     uses: ./.github/workflows/release.yaml
+#     with:
+#       app-name: test-a
   deploy:
     needs: release
     uses: ./.github/workflows/deployment.yaml
     with:
       app-name: test-a
       stage: staging
-      tag: 1.4.0
     secrets:
       aws-secret-key-id: ${{ secrets.STG_AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.STG_AWS_SECRET_ACCESS_KEY }}
