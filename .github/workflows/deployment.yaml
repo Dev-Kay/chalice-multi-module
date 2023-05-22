@@ -40,52 +40,52 @@ jobs:
           echo "working-directory :  ${{ env.APP_PATH }}"
           echo "branch : ${GITHUB_REF##*/}"
           cat pyproject.toml
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.aws-secret-key-id }}
-#           aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
-#           aws-region: ap-northeast-2
-#       - name: Set up Python
-#         uses: actions/setup-python@v1
-#         with:
-#           python-version: 3.8
-#       - name: Get full python version
-#         id: full-python-version
-#         run: |
-#           python -c "import sys; print('::set-output name=version::' + '-'.join(map(str, sys.version_info)))"
-#       - name: Install poetry
-#         uses: snok/install-poetry@v1
-#         with:
-#           version: 1.4.2
-#           installer-parallel: true
-#           virtualenvs-in-project: false
-#           virtualenvs-path: ~/.virtualenvs
-#       - run: poetry install --no-root
-#       - name: Cache poetry virtualenv
-#         uses: actions/cache@v1
-#         id: cache
-#         with:
-#           path: ~/.virtualenvs
-#           key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles(inputs.app-path) }}
-#       - name: Install python packages
-#         run: |
-#           poetry install --no-root
-#         if: steps.cache.outputs.cache-hit != 'true'
-#       - name: Lint
-#         run: |
-#           poetry run black --check --fast --preview .
-#           poetry run flake8 --config=setup.cfg .
-#           poetry run isort --check-only .
-#       - name: Static type check
-#         run: |
-#           poetry run mypy --config-file setup.cfg .
-#       - name: Check if requirements.txt is updated
-#         run: |
-#           poetry export --format requirements.txt --without-hashes | cut -f 1 -d ';' > requirements_from_poetry.txt
-#           diff -c requirements_from_poetry.txt requirements.txt
-#       - name: Run Pytest
-#         run: poetry run pytest
-#       - name: Deploy lambda
-#         run: |
-#           poetry run chalice deploy --stage "${{ inputs.stage }}"
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws-secret-key-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
+          aws-region: ap-northeast-2
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Get full python version
+        id: full-python-version
+        run: |
+          python -c "import sys; print('::set-output name=version::' + '-'.join(map(str, sys.version_info)))"
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.4.2
+          installer-parallel: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.virtualenvs
+      - run: poetry install --no-root
+      - name: Cache poetry virtualenv
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: ~/.virtualenvs
+          key: poetry-${{ steps.full-python-version.outputs.version }}-${{ hashFiles(inputs.app-path) }}
+      - name: Install python packages
+        run: |
+          poetry install --no-root
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Lint
+        run: |
+          poetry run black --check --fast --preview .
+          poetry run flake8 --config=setup.cfg .
+          poetry run isort --check-only .
+      - name: Static type check
+        run: |
+          poetry run mypy --config-file setup.cfg .
+      - name: Check if requirements.txt is updated
+        run: |
+          poetry export --format requirements.txt --without-hashes | cut -f 1 -d ';' > requirements_from_poetry.txt
+          diff -c requirements_from_poetry.txt requirements.txt
+      - name: Run Pytest
+        run: poetry run pytest
+      - name: Deploy lambda
+        run: |
+          poetry run chalice deploy --stage "${{ inputs.stage }}"
