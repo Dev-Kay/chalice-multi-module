@@ -12,9 +12,9 @@ jobs:
   release:
     runs-on: ubuntu-20.04
     environment: Prod
+    permissions: write-all
     steps:
-      - permissions: write-all
-        uses: ./.github/workflows/release.yaml
+      - uses: ./.github/workflows/release.yaml
         with:
           app-path: ./test-a
 #  deploy:
