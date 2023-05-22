@@ -21,7 +21,7 @@ jobs:
 #     with:
 #       app-name: test-a
   deploy:
-    needs: release
+#     needs: release
     uses: ./.github/workflows/deployment.yaml
     with:
       app-name: test-a
